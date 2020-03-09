@@ -62,15 +62,15 @@ validator-lite-spring保留了原始spring的验证方式，支持 `@Validated` 
     
     <!-- 开启Spring的国际化语言配置，此配置同样可以在validator-lite-spring中生效 -->
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="cacheSeconds" value="1800" />
-		<property name="defaultEncoding" value="UTF-8" />
-		<property name="useCodeAsDefaultMessage" value="true" />
-		<property name="basenames">
-			<list>
-				<value>classpath:Message</value>
-			</list>
-		</property>
-	</bean>
+        <property name="cacheSeconds" value="1800" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="basenames">
+            <list>
+                <value>classpath:Message</value>
+            </list>
+        </property>
+    </bean>
     
     <!-- 省略你关于其他bean的配置 -->
     ...
