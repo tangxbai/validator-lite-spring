@@ -36,7 +36,7 @@
 
 	<properties>
 		<log.version>1.7.28</log.version>
-		<spring.version>5.0.4.RELEASE</spring.version>
+		<spring.version>5.1.0.RELEASE</spring.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<validator-lite.version>1.0.0</validator-lite.version>
 	</properties>
