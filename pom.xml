@@ -34,9 +34,23 @@
 	<url>https://github.com/tangxbai/validator-lite-spirng</url>
 	<description>Validator-lite Spring integration component</description>
 
+	<inceptionYear>2019</inceptionYear>
+	
+	<scm>
+		<url>https://github.com/tangxbai/validator-lite-spring.git</url>
+		<connection>scm:git:git@github.com:tangxbai/validator-lite-spring.git</connection>
+		<developerConnection>scm:git:git@github.com:tangxbai/validator-lite-spring.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	
+	<issueManagement>
+		<system>GitHub Issue Management</system>
+		<url>https://github.com/tangxbai/validator-lite-spring/issues</url>
+	</issueManagement>
+
 	<properties>
 		<log.version>1.7.28</log.version>
-		<spring.version>5.0.4.RELEASE</spring.version>
+		<spring.version>[5.0.16,)</spring.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<validator-lite.version>1.0.0</validator-lite.version>
 	</properties>
@@ -52,7 +66,6 @@
 			<groupId>com.viiyue.plugins</groupId>
 			<artifactId>validator-lite</artifactId>
 			<version>${validator-lite.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
