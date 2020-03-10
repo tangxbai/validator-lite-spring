@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>validator-lite-spring</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>validator-lite-spring</name>
@@ -52,7 +52,7 @@
 		<log.version>1.7.28</log.version>
 		<spring.version>[5.0.16,)</spring.version>
 		<servlet-api.version>2.5</servlet-api.version>
-		<validator-lite.version>1.0.0</validator-lite.version>
+		<validator-lite.version>[1.0.0,1.1.0)</validator-lite.version>
 	</properties>
 
 	<dependencies>
