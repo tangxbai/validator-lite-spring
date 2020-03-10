@@ -59,6 +59,9 @@ public class SpringMessageResovler implements MessageResolver {
 
 	@Override
 	public Locale getDefaultLocale() {
+		if ( defaultLocale == null ) {
+			this.defaultLocale = Locale.getDefault();
+		}
 		return defaultLocale;
 	}
 	
