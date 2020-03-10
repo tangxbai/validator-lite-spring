@@ -131,7 +131,7 @@ public class ValidatorLiteBean extends ContextConfigurion implements Initializin
 		ValidatorFactory factory = com.viiyue.plugins.validator.Validator.getFactory();
 		for ( String handlerClassName : getHandlerClassNames() ) {
 			factory.addHandler( handlerClassName );
-		};
+		}
 	}
 
 	@Override
