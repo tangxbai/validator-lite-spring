@@ -38,29 +38,32 @@ import com.viiyue.plugins.validator.utils.ArrayUtil;
 public class PrecompileUtils {
 	
 	private static final Logger log = LoggerFactory.getLogger( Validator.class );
+	private static final String beanName = "requestMappingHandlerMapping";
 
 	public static void compile( ApplicationContext context ) {
-		long startTime = System.currentTimeMillis();
-		// Precompile method parameter validation annotations in the controller
-		// to reduce time consumption during actual validation
-		RequestMappingHandlerMapping handlerMapping = context.getBean( RequestMappingHandlerMapping.class );
-		Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
-		for ( HandlerMethod handlerMethod : handlerMethods.values() ) {
-			MethodParameter [] parameters = handlerMethod.getMethodParameters();
-			if ( ArrayUtil.isNotEmpty( parameters ) ) {
-				Validated validated = handlerMethod.getMethodAnnotation( Validated.class );
-				// Check every parameter of the controller, 
-				// and pre-compiled the rules if the @Validated annotation is marked.
-				for ( MethodParameter methodParameter : parameters ) {
-					if ( validated != null || methodParameter.hasParameterAnnotation( Validated.class ) ) {
-						if ( Validator.compile( methodParameter.getParameter() ) == null ) { // Ordinary parameters
-							Validator.compile( methodParameter.getParameterType() ); // Entity bean object
+		if ( context.containsBean( beanName ) ) {
+			long startTime = System.currentTimeMillis();
+			// Precompile method parameter validation annotations in the controller
+			// to reduce time consumption during actual validation
+			RequestMappingHandlerMapping handlerMapping = context.getBean( RequestMappingHandlerMapping.class );
+			Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+			for ( HandlerMethod handlerMethod : handlerMethods.values() ) {
+				MethodParameter [] parameters = handlerMethod.getMethodParameters();
+				if ( ArrayUtil.isNotEmpty( parameters ) ) {
+					Validated validated = handlerMethod.getMethodAnnotation( Validated.class );
+					// Check every parameter of the controller, 
+					// and pre-compiled the rules if the @Validated annotation is marked.
+					for ( MethodParameter methodParameter : parameters ) {
+						if ( validated != null || methodParameter.hasParameterAnnotation( Validated.class ) ) {
+							if ( Validator.compile( methodParameter.getParameter() ) == null ) { // Ordinary parameters
+								Validator.compile( methodParameter.getParameterType() ); // Entity bean object
+							}
 						}
 					}
 				}
 			}
+			log.info( "Pre-compilation of validation rules is completed, processing time {}ms", System.currentTimeMillis() - startTime );
 		}
-		log.info( "Pre-compilation of validation rules is completed, processing time {}ms", System.currentTimeMillis() - startTime );
 	}
 	
 }
