@@ -18,6 +18,7 @@ package com.viiyue.plugins.validator.spring.beans;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -148,7 +149,7 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 		// Append each validation result to BindingResult
 		if ( !result.isPassed() ) {
 			ElementResult rejectedResult = result.getLastRejectedResult();
-			for ( FragmentResult fr : rejectedResult.getFragmentResults() ) {
+			for ( FragmentResult fr : ( List<FragmentResult> ) rejectedResult.getResult() ) { // Updated in v1.0.3
 				String basicMessageCode = Constants.DEFAULT_MESSAGE_KEY_PREFIX + "." + fr.getFragment();
 				String [] errorCodes = bindingResult.resolveMessageCodes( basicMessageCode, parameterName );
 				bindingResult.addError( new FieldError( DEFAULT_OBJECT_NAME, parameterName, argument, false, errorCodes, fr.getArguments(), fr.getErrorMessage() ) );
