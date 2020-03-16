@@ -15,6 +15,7 @@
  */
 package com.viiyue.plugins.validator.spring;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +85,7 @@ public final class ValidatorLite implements SmartValidator {
 			if ( fieldError == null || !fieldError.isBindingFailure() ) {
 				if ( rejected.isTypeOf( ValidatedResult.class ) ) {
 					errors.pushNestedPath( field );
-					processBindingErrors( rejected.getBeanResult(), errors );
+					processBindingErrors( ( ValidatedResult ) rejected.getResult(), errors ); // Updated in v1.0.3
 					errors.popNestedPath();
 				} else {
 					processFragmentErrors( rejected, errors, field );
@@ -101,7 +102,7 @@ public final class ValidatorLite implements SmartValidator {
 	 * @param field the parameter field name
 	 */
 	private void processFragmentErrors( ElementResult rejected, Errors errors, String field ) {
-		for ( FragmentResult result : rejected.getFragmentResults() ) {
+		for ( FragmentResult result : ( List<FragmentResult> ) rejected.getResult() ) { // Updated in v1.0.3
 			// Can do custom FieldError registration with invalid value from Validator, 
 			// as necessary for Validator compatibility (non-indexed set path in field)
 			if ( errors instanceof BindingResult ) {
