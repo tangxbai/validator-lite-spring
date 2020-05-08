@@ -43,6 +43,7 @@ import com.viiyue.plugins.validator.metadata.result.FragmentResult;
 import com.viiyue.plugins.validator.metadata.result.ValidatedResult;
 import com.viiyue.plugins.validator.spring.ValidatorLite;
 import com.viiyue.plugins.validator.spring.bindings.ParameterBindingResult;
+import com.viiyue.plugins.validator.spring.exception.ValidatedException;
 import com.viiyue.plugins.validator.spring.utils.LocaleUtils;
 
 /**
@@ -126,7 +127,7 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 		String parameterName = mp.getParameterName();
 		String containingName = mp.getContainingClass().getName();
 		String defaultMessage = "{" + containingName + "." + method.getName() + "." + parameterName + "}";
-		ValidatedResult result = Validator.validateParameter( argument, parameter, defaultMessage, locale, validated.value() );
+		ValidatedResult result = Validator.validateParameter( argument, parameter, parameterName, defaultMessage, locale, validated.value() );
 		
 		// Integration of multiple validation parameters
 		ValidatedResult validatedResult = null;
@@ -195,7 +196,7 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 			webRequest.removeAttribute( BINDING_RESULT, RequestAttributes.SCOPE_REQUEST );
 			webRequest.removeAttribute( VALIDATED_RESULT, RequestAttributes.SCOPE_REQUEST );
 			if ( !isParameterErrors && result != null && result.hasErrors() ) {
-				throw new BindException( result );
+				throw new ValidatedException( result );
 			}
 		}
 	}
