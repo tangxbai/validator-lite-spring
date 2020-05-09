@@ -55,7 +55,6 @@ import com.viiyue.plugins.validator.spring.utils.LocaleUtils;
  */
 public final class ValidationHandlerMethodArgumentResolverComposite extends HandlerMethodArgumentResolverComposite {
 
-	private static final String DEFAULT_OBJECT_NAME = "params";
 	private static final String FORWARD_ATTRIBUTE_PREFIX = "javax.servlet.forward";
 	private static final String BINDING_RESULT = ValidationHandlerMethodArgumentResolverComposite.class.getName() + ".BINDING_RESULT";
 	private static final String VALIDATED_RESULT = ValidationHandlerMethodArgumentResolverComposite.class.getName() + ".VALIDATED_RESULT";
@@ -97,6 +96,8 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 		}
 		
 		// Validating non-bean ordinary parameters
+		Method method = mp.getMethod();
+		String methodName = method.getName();
 		Parameter parameter = mp.getParameter();
 		Validated validated = getValidatedAnnotation( mp, parameter );
 		if ( validated == null ) {
@@ -112,7 +113,7 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 		// so use Map as the data source here.
 		else {
 			Map<String, Object> target = new HashMap<String, Object>( mp.getExecutable().getParameterCount() );
-			WebDataBinder binder = binderFactory.createBinder( webRequest, target, DEFAULT_OBJECT_NAME );
+			WebDataBinder binder = binderFactory.createBinder( webRequest, target, methodName );
 			binder.initDirectFieldAccess();
 			bindingResult = binder.getBindingResult();
 			webRequest.setAttribute( BINDING_RESULT, bindingResult, RequestAttributes.SCOPE_REQUEST ); // Temporary cache
@@ -123,7 +124,6 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 		Locale locale = LocaleUtils.switchLocale();
 
 		// Validation of common parameters
-		Method method = mp.getMethod();
 		String parameterName = mp.getParameterName();
 		String containingName = mp.getContainingClass().getName();
 		String defaultMessage = "{" + containingName + "." + method.getName() + "." + parameterName + "}";
@@ -153,7 +153,7 @@ public final class ValidationHandlerMethodArgumentResolverComposite extends Hand
 			for ( FragmentResult fr : ( List<FragmentResult> ) rejectedResult.getResult() ) { // Updated in v1.0.3
 				String basicMessageCode = Constants.DEFAULT_MESSAGE_KEY_PREFIX + "." + fr.getFragment();
 				String [] errorCodes = bindingResult.resolveMessageCodes( basicMessageCode, parameterName );
-				bindingResult.addError( new FieldError( DEFAULT_OBJECT_NAME, parameterName, argument, false, errorCodes, fr.getArguments(), fr.getErrorMessage() ) );
+				bindingResult.addError( new FieldError( methodName, parameterName, argument, false, errorCodes, fr.getArguments(), fr.getErrorMessage() ) );
 			}
 		}
 		
