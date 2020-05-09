@@ -15,6 +15,7 @@
  */
 package com.viiyue.plugins.validator.spring.bindings;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.ConfigurablePropertyAccessor;
@@ -35,8 +36,11 @@ public class ParameterBindingResult extends AbstractPropertyBindingResult {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Map<String, Object> target;
 	private ValidatedResult validated;
+	private final Map<String, Object> target;
+	
+	// Added in 1.0.4
+	private final Map<String, Class<?>> fieldTypes = new HashMap<>();
 
 	public ParameterBindingResult( @Nullable Map<String, Object> target, String objectName ) {
 		super( objectName );
@@ -45,7 +49,7 @@ public class ParameterBindingResult extends AbstractPropertyBindingResult {
 
 	@Override
 	public ConfigurablePropertyAccessor getPropertyAccessor() {
-		return new MapPropertyAccessor( target );
+		return new MapPropertyAccessor( target, fieldTypes );
 	}
 
 	@Override
@@ -66,6 +70,7 @@ public class ParameterBindingResult extends AbstractPropertyBindingResult {
 	public void putParameter( String field, @Nullable Object value, Class<?> type ) {
 		if ( this.target != null ) {
 			this.target.put( field, value );
+			this.fieldTypes.put( field, type );
 			this.recordFieldValue( field, type, value );
 		}
 	}

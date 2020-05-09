@@ -41,12 +41,20 @@ import org.springframework.lang.Nullable;
 class MapPropertyAccessor implements ConfigurablePropertyAccessor {
 
 	private final Map<String, Object> target;
+	
+	// Added in 1.0.4
+	private final Map<String, Class<?>> types;
 	private ConversionService conversionService;
 
-	public MapPropertyAccessor( Map<String, Object> target ) {
+	public MapPropertyAccessor( Map<String, Object> target, Map<String, Class<?>> types ) {
 		this.target = target;
+		this.types = types;
 	}
 
+	public void recordValueTypes( String field, Class<?> type ) {
+		this.types.put( field, type );
+	}
+	
 	@Override
 	public boolean isReadableProperty( String propertyName ) {
 		return target.containsKey( propertyName );
@@ -60,8 +68,7 @@ class MapPropertyAccessor implements ConfigurablePropertyAccessor {
 	@Override
 	@Nullable
 	public Class<?> getPropertyType( String propertyName ) throws BeansException {
-		Object value = target.get( propertyName );
-		return value == null ? null : value.getClass();
+		return types.getOrDefault( propertyName, null );
 	}
 
 	@Override
